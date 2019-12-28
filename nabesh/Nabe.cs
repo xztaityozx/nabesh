@@ -9,9 +9,28 @@ using System.Text;
 using System.Text.Unicode;
 
 namespace nabesh {
-    internal interface INabelizer {
-        string Nabelize();
-        string Asciilize();
+
+    internal abstract class Nabelizer {
+        /// <summary>
+        /// ナベ化した文字列のbyte列を返す
+        /// </summary>
+        /// <returns></returns>
+        public abstract IEnumerable<byte> Nabelize();
+        /// <summary>
+        /// 元の文字列を返す
+        /// </summary>
+        /// <returns></returns>
+        public abstract string Restore();
+        protected string OriginalString;
+        protected Nabelizer(string str) {
+            OriginalString = str;
+            FlagNabe = NabeTable.Default.GetBaseNabe($"{str[0]}");
+        }
+
+        /// <summary>
+        /// このナベブロックの無いナベ
+        /// </summary>
+        public BaseNabe FlagNabe { get; }
     }
 
     public enum BaseNabe {
@@ -31,7 +50,7 @@ namespace nabesh {
             return Base.ToBytes().Concat(GetIvs()).ToArray();
         }
 
-        private byte[] GetIvs() => new byte[] {0xdb, 0x40, 0xdd, IvsIndex};
+        private IEnumerable<byte> GetIvs() => new byte[] {0xdb, 0x40, 0xdd, IvsIndex};
 
         public override string ToString() {
             return

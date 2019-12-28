@@ -36,7 +36,7 @@ namespace nabesh {
                                 '2', '3', '4', '5'
                             },
                             [BaseNabe.辺] = new[] { '6', '7', '8' },
-                            [BaseNabe.邊] = new[] {
+                            [BaseNabe.邉] = new[] {
                                 ':', ';', '<', '=', '>',
                                 '?', '@', '[', '\\', ']',
                                 '^', '_', '`', '{', '|',
@@ -63,6 +63,12 @@ namespace nabesh {
         public char this[BaseNabe f, BaseNabe b, byte ivs] => decodeTable[f][b][ivs];
 
         public NabeElement this[string index] => encodeTable[index];
+
+        public BaseNabe GetBaseNabe(string item) => IsNabelizable(item) switch{
+            true => encodeTable[item].Flag,
+            false => BaseNabe.部
+            };
+
         public bool IsNabelizable(string str) => encodeTable.ContainsKey(str);
 
         private static NabeTable instance = null;
