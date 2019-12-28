@@ -43,7 +43,7 @@ namespace nabesh {
             Console.WriteLine(o);
             var size = 0;
             for (var item = StringInfo.GetTextElementEnumerator(o); item.MoveNext();) size++;
-            Console.SetCursorPosition(size*4-2 + offset, top);
+            Console.SetCursorPosition(size*2 + offset, top);
         }
 
         public void Start() {
