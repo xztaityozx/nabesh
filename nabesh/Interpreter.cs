@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,7 +41,9 @@ namespace nabesh {
             container.Parse(buffer);
             var o = container.Nabelize();
             Console.WriteLine(o);
-            Console.SetCursorPosition(o.Length*2 + offset, top);
+            var size = 0;
+            for (var item = StringInfo.GetTextElementEnumerator(o); item.MoveNext();) size++;
+            Console.SetCursorPosition(size*4-2 + offset, top);
         }
 
         public void Start() {
@@ -55,11 +58,15 @@ namespace nabesh {
                     CreateNoWindow = true,
                     FileName = "bash",
                     ArgumentList = { "-c", buffer},
-                    RedirectStandardOutput = true
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 }
             };
             if(!process.Start()) throw new Exception();
             var o = process.StandardOutput.ReadToEnd();
+            var e = process.StandardError.ReadToEnd();
+            if (string.IsNullOrEmpty(o)) o = e;
+
             process.WaitForExit();
 
             container.Parse(o);
